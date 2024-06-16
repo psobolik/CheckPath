@@ -1,7 +1,15 @@
 ﻿var path = GetPath().ToArray();
 WriteValues("PATH:", path);
-WriteValues("Missing folders in PATH:", path.Where(folder => !Directory.Exists(PathWithExpandedTilde(folder))).ToArray());
-WriteValues("Duplicate folders in PATH:", path.Where((item) => path.Count(i => i == item) > 1).Distinct().ToArray());
+WriteValues("\nInvalid folders in PATH:",
+    path.Where(folder => !Directory.Exists(PathWithExpandedTilde(folder))).ToArray());
+var folders = path.Select(folder => Path.TrimEndingDirectorySeparator(PathWithExpandedTilde(folder))).ToArray();
+WriteValues("\nDuplicate folders in PATH:",
+    folders
+        .Where(item =>
+            folders.Count(i => i == item) > 1)
+        .Distinct()
+        .ToArray());
+return;
 
 static string PathWithExpandedTilde(string str)
 {
@@ -13,7 +21,9 @@ static string PathWithExpandedTilde(string str)
 static IEnumerable<string> GetPath()
 {
     var path = Environment.GetEnvironmentVariable("PATH");
-    return string.IsNullOrWhiteSpace(path) ? Array.Empty<string>() : path.Split(Path.PathSeparator);
+    return string.IsNullOrWhiteSpace(path)
+        ? Array.Empty<string>()
+        : path.Split(Path.PathSeparator).Where(path => path != string.Empty).ToArray();
 }
 
 static void WriteValues(string header, string[] values)
@@ -21,13 +31,6 @@ static void WriteValues(string header, string[] values)
     const ConsoleColor headerColor = ConsoleColor.Green;
     const ConsoleColor infoColor = ConsoleColor.Yellow;
     const ConsoleColor listColor = ConsoleColor.White;
-        
-    static void WriteValue(string value, ConsoleColor foregroundColor)
-    {
-        Console.ForegroundColor = foregroundColor;
-        Console.WriteLine(value);
-        Console.ResetColor();
-    }
 
     WriteValue(header, headerColor);
     if (values.Any())
@@ -40,5 +43,14 @@ static void WriteValues(string header, string[] values)
     else
     {
         WriteValue("[None]", infoColor);
+    }
+
+    return;
+
+    static void WriteValue(string value, ConsoleColor foregroundColor)
+    {
+        Console.ForegroundColor = foregroundColor;
+        Console.WriteLine(value);
+        Console.ResetColor();
     }
 }
