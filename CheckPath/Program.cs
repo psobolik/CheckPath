@@ -1,9 +1,9 @@
-var path = GetPath(); 
+var path = GetPath().ToArray(); 
 WriteValues("PATH:", path);
 // Normalize the folders in the path
-var normalPath = path.Select(folder => Path.TrimEndingDirectorySeparator(PathWithExpandedTilde(folder)));
+var normalPath = path.Select(folder => Path.TrimEndingDirectorySeparator(PathWithExpandedTilde(folder))).ToArray();
 WriteValues("\nInvalid folders in PATH:",
-    normalPath.Distinct().Where(folder => !Directory.Exists(folder)));
+    normalPath.Distinct().Where(folder => !Directory.Exists(folder)).ToArray());
 WriteValues("\nDuplicate folders in PATH:",
     normalPath
         .Where(item =>
@@ -27,7 +27,7 @@ static IEnumerable<string> GetPath()
         : path.Split(Path.PathSeparator).Where(path => path != string.Empty);
 }
 
-static void WriteValues(string header, IEnumerable<string> values)
+static void WriteValues(string header, string[] values)
 {
     const ConsoleColor headerColor = ConsoleColor.Green;
     const ConsoleColor infoColor = ConsoleColor.Yellow;
