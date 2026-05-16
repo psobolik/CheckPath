@@ -1,6 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11806.211 stable
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckPath", "CheckPath\CheckPath.csproj", "{272137F5-082F-4A06-8114-456428EF9BA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D014884E-08A4-455B-91C4-FB7462F0B103}"
+	ProjectSection(SolutionItems) = preProject
+		justfile = justfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +20,11 @@ Global
 		{272137F5-082F-4A06-8114-456428EF9BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{272137F5-082F-4A06-8114-456428EF9BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{272137F5-082F-4A06-8114-456428EF9BA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B62A6B06-519A-4355-A434-E2E5710CD453}
 	EndGlobalSection
 EndGlobal
