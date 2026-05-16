@@ -1,23 +1,22 @@
-var path = GetPath().ToArray(); 
-WriteValues("PATH:", path);
-// Normalize the folders in the path
-var normalPath = path.Select(folder => Path.TrimEndingDirectorySeparator(PathWithExpandedTilde(folder))).ToArray();
+var path = GetPath();
+WriteValues("PATH:", [.. path]);
+
+// Normalize the folders in the path by expanding leading tildes and removing
+// trailing directory separtors.
+var homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+var normalPath = path.Select(folder =>
+{
+    folder = folder.StartsWith('~') ? string.Concat(homePath, folder) : folder;
+    return Path.TrimEndingDirectorySeparator(folder);
+});
 WriteValues("\nInvalid folders in PATH:",
-    normalPath.Distinct().Where(folder => !Directory.Exists(folder)).ToArray());
+    [.. normalPath.Distinct().Where(folder => !Directory.Exists(folder))]);
 WriteValues("\nDuplicate folders in PATH:",
-    normalPath
+    [.. normalPath
         .Where(item =>
             normalPath.Count(i => i == item) > 1)
-        .Distinct()
-        .ToArray());
+        .Distinct()]);
 return;
-
-static string PathWithExpandedTilde(string str)
-{
-    return str.StartsWith('~')
-        ? string.Concat(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), str.AsSpan(1))
-        : str;
-}
 
 static IEnumerable<string> GetPath()
 {
