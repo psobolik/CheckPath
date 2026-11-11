@@ -1,14 +1,14 @@
-var path = GetPath();
+var path = GetPath().ToList();
 WriteValues("PATH:", [.. path]);
 
 // Normalize the folders in the path by expanding leading tildes and removing
-// trailing directory separtors.
+// trailing directory separators.
 var homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 var normalPath = path.Select(folder =>
 {
     folder = folder.StartsWith('~') ? string.Concat(homePath, folder) : folder;
     return Path.TrimEndingDirectorySeparator(folder);
-});
+}).ToList();
 WriteValues("\nInvalid folders in PATH:",
     [.. normalPath.Distinct().Where(folder => !Directory.Exists(folder))]);
 WriteValues("\nDuplicate folders in PATH:",
@@ -22,7 +22,7 @@ static IEnumerable<string> GetPath()
 {
     var path = Environment.GetEnvironmentVariable("PATH");
     return string.IsNullOrWhiteSpace(path)
-        ? Array.Empty<string>()
+        ? []
         : path.Split(Path.PathSeparator).Where(path => path != string.Empty);
 }
 
@@ -33,7 +33,7 @@ static void WriteValues(string header, string[] values)
     const ConsoleColor listColor = ConsoleColor.White;
 
     WriteValue(header, headerColor);
-    if (values.Any())
+    if (values.Length != 0)
     {
         foreach (var value in values)
         {
